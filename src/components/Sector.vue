@@ -16,7 +16,9 @@ const props = defineProps<{
     deg: number;
 }>();
 
-const offset = computed(() => 360 - props.deg);
+// 周长 2 * pi * r
+const circleLen = 282;
+const offset = computed(() => ((360 - props.deg) / 360) * circleLen);
 </script>
 
 <style scoped lang="less">
@@ -37,7 +39,7 @@ const offset = computed(() => 360 - props.deg);
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
             stroke: #52c41a;
-            stroke-dasharray: 360;
+            stroke-dasharray: 282;
             stroke-dashoffset: v-bind(offset);
             transition: stroke-dashoffset 0.5s;
         }
@@ -48,6 +50,8 @@ const offset = computed(() => 360 - props.deg);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
     }
 }
 </style>
