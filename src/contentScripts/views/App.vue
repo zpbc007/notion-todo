@@ -3,7 +3,7 @@
         class="fixed right-0 bottom-0 m-5 z-100 flex font-sans select-none leading-1em flex-col"
     >
         <Sector class="w-20 h-20" color="red" :deg="deg">
-            <div class="text-base font-medium">
+            <div class="time-text text-base font-medium">
                 <span>{{ formatTime(leftTime.minute) }}</span>
                 :
                 <span>{{ formatTime(leftTime.seconds) }}</span>
@@ -63,3 +63,9 @@ const formatTime = (time: number) => {
     return time < 10 ? `0${time}` : `${time}`;
 };
 </script>
+
+<style scoped lang="less">
+.time-text {
+    color: #43aa8b;
+}
+</style>

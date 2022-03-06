@@ -38,7 +38,7 @@ const offset = computed(() => ((360 - props.deg) / 360) * circleLen);
             stroke-linecap: round;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
-            stroke: #52c41a;
+            stroke: #43aa8b;
             stroke-dasharray: 282;
             stroke-dashoffset: v-bind(offset);
             transition: stroke-dashoffset 0.5s;
