@@ -14,11 +14,13 @@
 import { computed } from 'vue';
 const props = defineProps<{
     deg: number;
+    color: string;
 }>();
 
 // 周长 2 * pi * r
 const circleLen = 282;
 const offset = computed(() => ((360 - props.deg) / 360) * circleLen);
+const strokeColor = computed(() => props.color);
 </script>
 
 <style scoped lang="less">
@@ -38,7 +40,7 @@ const offset = computed(() => ((360 - props.deg) / 360) * circleLen);
             stroke-linecap: round;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
-            stroke: #43aa8b;
+            stroke: v-bind(strokeColor);
             stroke-dasharray: 282;
             stroke-dashoffset: v-bind(offset);
             transition: stroke-dashoffset 0.5s;
@@ -47,11 +49,10 @@ const offset = computed(() => ((360 - props.deg) / 360) * circleLen);
 
     .title {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 0;
+        left: 0;
         width: 100%;
-        text-align: center;
+        height: 100%;
     }
 }
 </style>

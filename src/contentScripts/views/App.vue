@@ -2,13 +2,13 @@
     <div
         class="fixed right-0 bottom-0 m-5 z-100 flex font-sans select-none leading-1em flex-col"
     >
-        <Sector class="w-20 h-20" color="red" :deg="deg">
-            <div class="time-text text-base font-medium">
-                <span>{{ formatTime(leftTime.minute) }}</span>
-                :
-                <span>{{ formatTime(leftTime.seconds) }}</span>
-            </div>
-        </Sector>
+        <Clock
+            :left-seconds="leftSeconds"
+            :total-seconds="totalSeconds"
+            :status="clockStatus"
+            type="break"
+            @click="handleClockClick"
+        />
         <div
             class="bg-white text-gray-800 rounded-full shadow w-max h-min"
             p="x-4 y-2"
@@ -32,40 +32,22 @@
 <script setup lang="ts">
 import { useToggle, useInterval } from '@vueuse/core';
 import 'virtual:windi.css';
+import { ClockStatus, ClockType } from '~/components/clock';
 
 const [show, toggle] = useToggle(false);
 const timeSlice = useInterval(1000);
-// 一分钟
-const totalTime = 60;
 
-const deg = computed(() => {
-    const targetDeg = Math.floor((timeSlice.value / totalTime) * 360);
+const totalSeconds = ref(60);
+const leftSeconds = computed(() => 60 - timeSlice.value);
 
-    return targetDeg >= 360 ? 360 : targetDeg;
-});
+const clockStatus = ref<ClockStatus>('idle');
+const clockType = ref<ClockType>('task');
 
-const leftTime = computed(() => {
-    const leftSeconds = totalTime - timeSlice.value;
-    const minute = Math.floor(leftSeconds / 60);
-    const seconds = leftSeconds % 60;
-
-    return {
-        minute,
-        seconds,
-    };
-});
-
-const formatTime = (time: number) => {
-    if (time < 0) {
-        time = 0;
+const handleClockClick = () => {
+    if (clockStatus.value === 'idle') {
+        clockStatus.value = 'doing';
+    } else {
+        clockStatus.value = 'idle';
     }
-
-    return time < 10 ? `0${time}` : `${time}`;
 };
 </script>
-
-<style scoped lang="less">
-.time-text {
-    color: #43aa8b;
-}
-</style>
