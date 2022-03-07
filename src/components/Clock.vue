@@ -1,7 +1,7 @@
 <template>
-    <Sector class="w-20 h-20" :color="currentColor" :deg="taskDeg">
+    <Sector :color="currentColor" :deg="taskDeg">
         <div :class="['wrapper', props.type === 'task' ? 'task' : 'break']">
-            <div class="seconds middle text-base font-medium">
+            <div class="seconds text-center middle text-base font-medium">
                 <span>{{ formatTime(leftTime.minute) }}</span>
                 :
                 <span>{{ formatTime(leftTime.seconds) }}</span>
@@ -96,7 +96,6 @@ const leftTime = computed(() => {
 
     .seconds {
         width: 100%;
-        text-align: center;
     }
 
     .control {
