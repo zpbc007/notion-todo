@@ -7,43 +7,28 @@
             :total-seconds="totalSeconds"
             :status="clockStatus"
             type="break"
-            @click="handleClockClick"
+            @click="toggle"
         />
     </div>
 </template>
 
 <script setup lang="ts">
 import { useIntervalFn } from '@vueuse/core';
-import { ClockStatus, ClockType } from '~/components/clock';
 import 'virtual:windi.css';
+import { useClockStatus } from './app';
 
-const Seconds = {
-    task: 25 * 60,
-    break: 5 * 60,
-    longBreak: 15 * 60,
-    // task: 10,
-    // break: 3,
-    // longBreak: 5,
-};
-const totalSeconds = ref(Seconds.task);
-const timeSlice = ref(0);
-// 完成几次番茄钟
-const clockTime = ref(0);
-const { pause, resume } = useIntervalFn(() => {
-    timeSlice.value++;
-}, 1000);
-const leftSeconds = computed(() => totalSeconds.value - timeSlice.value);
+const {
+    next,
+    clockStatus,
+    clockType,
+    clearTimer,
+    leftSeconds,
+    onTick,
+    toggle,
+    totalSeconds,
+} = useClockStatus();
 
-const clockStatus = ref<ClockStatus>('idle');
-const clockType = ref<ClockType>('task');
-
-const handleClockClick = () => {
-    if (clockStatus.value === 'idle') {
-        clockStatus.value = 'doing';
-    } else {
-        clockStatus.value = 'idle';
-    }
-};
+const { pause, resume } = useIntervalFn(onTick, 1000);
 
 // 切换计时状态
 watch(
@@ -55,7 +40,7 @@ watch(
             resume();
         }
 
-        timeSlice.value = 0;
+        clearTimer();
     },
     { immediate: true }
 );
@@ -66,26 +51,6 @@ watch(leftSeconds, (val) => {
         return;
     }
 
-    clockStatus.value = 'idle';
-    if (clockType.value === 'break') {
-        clockTime.value++;
-    }
-
-    // break => task
-    if (clockType.value === 'break' || clockType.value === 'longBreak') {
-        totalSeconds.value = Seconds.task;
-        return (clockType.value = 'task');
-    }
-
-    if (clockTime.value < 3) {
-        // task => break
-        totalSeconds.value = Seconds.break;
-        clockType.value = 'break';
-    } else {
-        // task => longBreak
-        totalSeconds.value = Seconds.longBreak;
-        clockType.value = 'longBreak';
-        clockTime.value = 0;
-    }
+    next();
 });
 </script>
