@@ -9,36 +9,30 @@
             type="break"
             @click="handleClockClick"
         />
-        <div
-            class="bg-white text-gray-800 rounded-full shadow w-max h-min"
-            p="x-4 y-2"
-            m="y-auto r-2"
-            transition="opacity duration-300"
-            :class="show ? 'opacity-100' : 'opacity-0'"
-        >
-            Vitesse WebExt1
-        </div>
-        <div
-            class="flex w-10 h-10 rounded-full shadow cursor-pointer"
-            bg="teal-600 hover:teal-700"
-            @click="toggle()"
-        >
-            <pixelarticons-power class="block m-auto text-white text-lg" />
-        </div>
-        <div class="zp"></div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useToggle, useInterval } from '@vueuse/core';
-import 'virtual:windi.css';
+import { useIntervalFn } from '@vueuse/core';
 import { ClockStatus, ClockType } from '~/components/clock';
+import 'virtual:windi.css';
 
-const [show, toggle] = useToggle(false);
-const timeSlice = useInterval(1000);
-
-const totalSeconds = ref(60);
-const leftSeconds = computed(() => 60 - timeSlice.value);
+const Seconds = {
+    task: 25 * 60,
+    break: 5 * 60,
+    longBreak: 15 * 60,
+    // task: 10,
+    // break: 3,
+    // longBreak: 5,
+};
+const totalSeconds = ref(Seconds.task);
+const timeSlice = ref(0);
+// 完成几次番茄钟
+const clockTime = ref(0);
+const { pause, resume } = useIntervalFn(() => {
+    timeSlice.value++;
+}, 1000);
+const leftSeconds = computed(() => totalSeconds.value - timeSlice.value);
 
 const clockStatus = ref<ClockStatus>('idle');
 const clockType = ref<ClockType>('task');
@@ -50,4 +44,48 @@ const handleClockClick = () => {
         clockStatus.value = 'idle';
     }
 };
+
+// 切换计时状态
+watch(
+    clockStatus,
+    (val) => {
+        if (val === 'idle') {
+            pause();
+        } else {
+            resume();
+        }
+
+        timeSlice.value = 0;
+    },
+    { immediate: true }
+);
+
+// 计时结束，切换任务状态
+watch(leftSeconds, (val) => {
+    if (val > 0) {
+        return;
+    }
+
+    clockStatus.value = 'idle';
+    if (clockType.value === 'break') {
+        clockTime.value++;
+    }
+
+    // break => task
+    if (clockType.value === 'break' || clockType.value === 'longBreak') {
+        totalSeconds.value = Seconds.task;
+        return (clockType.value = 'task');
+    }
+
+    if (clockTime.value < 3) {
+        // task => break
+        totalSeconds.value = Seconds.break;
+        clockType.value = 'break';
+    } else {
+        // task => longBreak
+        totalSeconds.value = Seconds.longBreak;
+        clockType.value = 'longBreak';
+        clockTime.value = 0;
+    }
+});
 </script>
