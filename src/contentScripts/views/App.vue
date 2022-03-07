@@ -7,7 +7,7 @@
             :left-seconds="leftSeconds"
             :total-seconds="totalSeconds"
             :status="clockStatus"
-            type="break"
+            :type="clockType"
             @click="toggle"
         />
         <div class="text-center text-base font-medium">{{ clockMsg }}</div>
