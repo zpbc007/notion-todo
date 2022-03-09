@@ -40,6 +40,5 @@ export interface MessageResult<T> {
 export enum StartTaskResult {
     CanNotFind = 0,
     Success = 1,
-    AlreadyStarted = 2,
-    Interrupted = 3,
+    CanNotStart = 2,
 }
