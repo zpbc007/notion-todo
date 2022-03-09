@@ -23,21 +23,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ClockStatus, ClockType } from './clock';
+import { TaskStatus, TaskType } from '~/message';
 
 const props = defineProps<{
     // 剩余时间
     leftSeconds: number;
     totalSeconds: number;
-    status: ClockStatus;
-    type: ClockType;
-}>();
-
-const emits = defineEmits<{
-    // 开始
-    (e: 'start'): void;
-    // 暂停
-    (e: 'pause'): void;
+    status: TaskStatus;
+    type: TaskType;
 }>();
 
 const Color = {
@@ -46,7 +39,7 @@ const Color = {
 };
 
 const currentColor = computed(() =>
-    props.type === 'break' ? Color.break : Color.task
+    props.type === 'task' ? Color.task : Color.break
 );
 
 // 当前任务完成度

@@ -6,6 +6,7 @@ specifiers:
   '@iconify/json': ^1.1.408
   '@types/fs-extra': ^9.0.13
   '@types/node': ^16.10.2
+  '@types/uuid': ^8.3.4
   '@types/webextension-polyfill': ^0.8.2
   '@typescript-eslint/eslint-plugin': ^4.32.0
   '@vitejs/plugin-vue': ^1.9.2
@@ -26,6 +27,7 @@ specifiers:
   unplugin-auto-import: ^0.5.11
   unplugin-icons: ^0.11.4
   unplugin-vue-components: ^0.15.4
+  uuid: ^8.3.2
   vite: ^2.6.2
   vite-plugin-windicss: ^1.4.8
   vue: ^3.2.19
@@ -34,12 +36,16 @@ specifiers:
   webext-bridge: ^5.0.0
   webextension-polyfill: ^0.8.0
 
+dependencies:
+  uuid: 8.3.2
+
 devDependencies:
   '@antfu/eslint-config': 0.9.0_eslint@7.32.0+typescript@4.4.3
   '@ffflorian/jszip-cli': 3.1.5
   '@iconify/json': 1.1.408
   '@types/fs-extra': 9.0.13
   '@types/node': 16.10.2
+  '@types/uuid': 8.3.4
   '@types/webextension-polyfill': 0.8.2
   '@typescript-eslint/eslint-plugin': 4.32.0_eslint@7.32.0+typescript@4.4.3
   '@vitejs/plugin-vue': 1.9.2_vite@2.6.2
@@ -574,6 +580,10 @@ packages:
 
   /@types/throttle-debounce/2.1.0:
     resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
+    dev: true
+
+  /@types/uuid/8.3.4:
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
     dev: true
 
   /@types/webextension-polyfill/0.8.2:
@@ -5561,7 +5571,6 @@ packages:
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
-    dev: true
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}

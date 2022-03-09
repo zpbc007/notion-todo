@@ -6,31 +6,27 @@
             class="w-20 h-20 mx-auto"
             :left-seconds="leftSeconds"
             :total-seconds="totalSeconds"
-            :status="clockStatus"
-            :type="clockType"
-            @click="toggle"
+            :status="curTask?.status || 'idle'"
+            :type="curTask?.type || 'task'"
+            @click="toggleTask"
         />
         <div class="text-center text-base font-medium">{{ clockMsg }}</div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useIntervalFn } from '@vueuse/core';
+import { useTaskStore } from './store';
 import 'virtual:windi.css';
-import { useClockStatus } from './app';
 
-const {
-    next,
-    clockStatus,
-    clockType,
-    clearTimer,
-    leftSeconds,
-    onTick,
-    toggle,
-    totalSeconds,
-} = useClockStatus();
+const { curTask, startTask, stopTask, leftSeconds, totalSeconds } =
+    useTaskStore();
+
 const clockMsg = computed(() => {
-    switch (clockType.value) {
+    if (!curTask.value) {
+        return 'Time to focus!';
+    }
+
+    switch (curTask.value.type) {
         case 'task':
             return 'Time to focus!';
         case 'break':
@@ -42,29 +38,16 @@ const clockMsg = computed(() => {
     }
 });
 
-const { pause, resume } = useIntervalFn(onTick, 1000);
-
-// 切换计时状态
-watch(
-    clockStatus,
-    (val) => {
-        if (val === 'idle') {
-            pause();
-        } else {
-            resume();
-        }
-
-        clearTimer();
-    },
-    { immediate: true }
-);
-
-// 计时结束，切换任务状态
-watch(leftSeconds, (val) => {
-    if (val > 0) {
+const toggleTask = () => {
+    if (!curTask.value) {
         return;
     }
 
-    next();
-});
+    if (curTask.value.status === 'idle') {
+        return startTask();
+    }
+    if (curTask.value.status === 'doing') {
+        return stopTask();
+    }
+};
 </script>
