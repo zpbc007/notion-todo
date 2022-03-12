@@ -29,7 +29,7 @@ const strokeColor = computed(() => props.color);
 
     .sector {
         .bg {
-            fill: none;
+            fill: rgba(255, 255, 255, 0.5);
             stroke-width: 5px;
             stroke: rgb(245, 245, 245);
         }
