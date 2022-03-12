@@ -1,7 +1,15 @@
 <template>
     <Sector :color="currentColor" :deg="taskDeg">
         <div :class="['wrapper', props.type === 'task' ? 'task' : 'break']">
-            <div class="seconds text-center middle text-base font-medium">
+            <div
+                :class="[
+                    'seconds',
+                    'text-center',
+                    'middle',
+                    'font-medium',
+                    isOptions ? 'text-8xl' : 'text-base',
+                ]"
+            >
                 <span>{{ formatTime(leftTime.minute) }}</span>
                 :
                 <span>{{ formatTime(leftTime.seconds) }}</span>
@@ -10,12 +18,12 @@
                 <ic:round-play-arrow
                     v-show="props.status === 'idle'"
                     class="btn middle"
-                    style="font-size: 3rem"
+                    :style="controlStyle"
                 />
                 <ic:round-stop
                     v-show="props.status === 'doing'"
                     class="btn middle"
-                    style="font-size: 3rem"
+                    :style="controlStyle"
                 />
             </div>
         </div>
@@ -23,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import { CSSProperties } from 'vue';
 import { TaskStatus, TaskType } from '~/message';
 
 const props = defineProps<{
@@ -31,6 +40,7 @@ const props = defineProps<{
     totalSeconds: number;
     status: TaskStatus;
     type: TaskType;
+    isOptions?: boolean;
 }>();
 
 const Color = {
@@ -68,6 +78,10 @@ const leftTime = computed(() => {
         seconds,
     };
 });
+
+const controlStyle = computed<CSSProperties>(() => ({
+    fontSize: props.isOptions ? '6rem' : '3rem',
+}));
 </script>
 
 <style scoped lang="less">
